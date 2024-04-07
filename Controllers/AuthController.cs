@@ -31,19 +31,7 @@ public class AuthController : ControllerBase
         return await _context.Users.ToListAsync();
     }
 
-    // // GET: api/Todo/5
-    // [HttpGet("{id}")]
-    // public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
-    // {
-    //     var todoItem = await _context.TodoItems.FindAsync(id);
 
-    //     if(todoItem == null)
-    //     {
-    //         return NotFound();
-    //     }
-
-    //     return todoItem;
-    // }
 
     // POST: api/Register
     [HttpPost]
@@ -106,6 +94,28 @@ public class AuthController : ControllerBase
 
             return Ok(tokenString);
         }
+    }
+
+        [HttpPost]
+    public async Task<ActionResult<Course>> CreateCourse(Course course)
+    {
+
+     if (_context.Courses.Any(u => u.Title == course.Title))
+        {
+            return BadRequest("This course already exist.");
+        }
+
+        _context.Courses.Add(course);
+        await _context.SaveChangesAsync();
+
+        return Ok("Course Added");
+    }
+
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Course>>> ListCourse()
+    {
+        return await _context.Courses.ToListAsync();
     }
 
     // // PUT: api/Todo/5
